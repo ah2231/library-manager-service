@@ -14,6 +14,7 @@ import java.util.List;
 public class User {
 
     private final int userId;
+    private final String name;
     @Builder.Default
     private final List<Item> borrowedItems = Collections.synchronizedList(new ArrayList<>());
 }

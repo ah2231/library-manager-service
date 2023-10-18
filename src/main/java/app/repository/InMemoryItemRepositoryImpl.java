@@ -1,6 +1,6 @@
-package repository;
+package app.repository;
 
-import model.Item;
+import app.model.Item;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

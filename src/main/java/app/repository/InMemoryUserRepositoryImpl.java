@@ -1,12 +1,13 @@
-package repository;
+package app.repository;
 
-import model.Item;
-import model.User;
+import app.model.User;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Component
 public class InMemoryUserRepositoryImpl implements UserRepository {
 
     private final ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();

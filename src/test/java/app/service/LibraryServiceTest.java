@@ -1,21 +1,21 @@
-package service;
+package app.service;
 
-import model.Item;
-import model.User;
+import app.model.Item;
+import app.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import repository.ItemRepository;
-import repository.UserRepository;
+import app.repository.ItemRepository;
+import app.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static model.ItemType.*;
+import static app.model.ItemType.*;
 import static org.mockito.Mockito.when;
 
 public class LibraryServiceTest {

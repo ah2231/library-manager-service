@@ -1,7 +1,6 @@
-package repository;
+package app.repository;
 
-import model.Item;
-import model.User;
+import app.model.User;
 
 import java.util.Collection;
 import java.util.Optional;

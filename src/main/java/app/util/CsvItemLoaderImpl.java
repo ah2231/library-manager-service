@@ -1,8 +1,7 @@
-package util;
+package app.util;
 
-import model.Item;
-import model.ItemType;
-import model.User;
+import app.model.Item;
+import app.model.ItemType;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -28,7 +27,7 @@ public class CsvItemLoaderImpl implements ItemDataLoader {
             for (CSVRecord csvRecord : csvParser) {
                 Integer uniqueId = Integer.parseInt(csvRecord.get("UniqueID"));
                 Integer itemId = Integer.parseInt(csvRecord.get("ItemID"));
-                ItemType type = ItemType.valueOf(csvRecord.get("Type"));
+                ItemType type = ItemType.valueOf(csvRecord.get("Type").toUpperCase());
                 String title = csvRecord.get("Title");
                 boolean isBorrowed = false;
                 LocalDate borrowDate = null;

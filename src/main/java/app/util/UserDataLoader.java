@@ -1,6 +1,6 @@
-package util;
+package app.util;
 
-import model.User;
+import app.model.User;
 
 import java.util.List;
 

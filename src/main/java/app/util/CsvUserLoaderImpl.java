@@ -1,6 +1,6 @@
-package util;
+package app.util;
 
-import model.User;
+import app.model.User;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;

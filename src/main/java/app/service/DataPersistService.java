@@ -1,11 +1,11 @@
-package service;
+package app.service;
 
-import model.Item;
-import model.User;
+import app.model.Item;
+import app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repository.ItemRepository;
-import repository.UserRepository;
+import app.repository.ItemRepository;
+import app.repository.UserRepository;
 
 import java.util.List;
 

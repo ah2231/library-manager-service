@@ -1,13 +1,13 @@
-package service;
+package app.service;
 
 import jakarta.annotation.PostConstruct;
-import model.User;
+import app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import model.Item;
-import util.ItemDataLoader;
-import util.UserDataLoader;
+import app.model.Item;
+import app.util.ItemDataLoader;
+import app.util.UserDataLoader;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import java.util.List;
 @Service
 public class DataLoaderService {
 
-    @Value("${inventory.file.path}")
+    @Value("${file.path.items}")
     private String itemsFilePath;
 
-    @Value("${users.file.path}")
+    @Value("${file.path.users}")
     private String usersFilePath;
 
     @Autowired

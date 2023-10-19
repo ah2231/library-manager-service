@@ -1,6 +1,7 @@
 package app.service;
 
 import app.model.Item;
+import app.model.ItemType;
 import app.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static app.model.ItemType.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class LibraryServiceTest {
 
@@ -73,10 +74,11 @@ public class LibraryServiceTest {
 
     @Test
     public void testGetAllOverdueItems() {
-        Item item = new Item(1, 1, DVD, "Pi", false, LocalDate.now(), LocalDate.now().plusWeeks(1));
-        Item item2 = new Item(2, 2, BOOK, "Java Concurrency In Practice", true, LocalDate.now(), LocalDate.now().plusWeeks(1));
-        Item item3 = new Item(3, 3, VHS, "WarGames", true, LocalDate.now(), LocalDate.now().minusWeeks(1));
-        Item item4 = new Item(4, 4, VHS, "Hackers", true, LocalDate.now(), LocalDate.now().minusWeeks(1));
+        LocalDate mockNow = LocalDate.of(2023, 10, 19);
+        Item item = new Item(1, 1, DVD, "Pi", false, mockNow, mockNow.plusWeeks(1));
+        Item item2 = new Item(2, 2, BOOK, "Java Concurrency In Practice", true, mockNow, mockNow.plusWeeks(1));
+        Item item3 = new Item(3, 3, VHS, "WarGames", true, mockNow, mockNow.minusWeeks(1));
+        Item item4 = new Item(4, 4, VHS, "Hackers", true, mockNow, mockNow.minusWeeks(1));
 
         when(itemRepository.findAll()).thenReturn(List.of(item, item2, item3, item4));
 
@@ -118,8 +120,9 @@ public class LibraryServiceTest {
 
     @Test
     public void testIsItemAvailableWithDuplicates() {
+        LocalDate mockNow = LocalDate.of(2023, 10, 19);
         int itemId = 5;
-        Item item = new Item(1, itemId, DVD, "Pi", true, LocalDate.now(), LocalDate.now().plusWeeks(1));
+        Item item = new Item(1, itemId, DVD, "Pi", true, mockNow, mockNow.plusWeeks(1));
         Item item2 = new Item(2, itemId, DVD, "Pi", false, null, null);
 
         when(itemRepository.findAll()).thenReturn(List.of(item, item2));
@@ -127,11 +130,6 @@ public class LibraryServiceTest {
         boolean isItemAvailable = libraryService.isItemAvailable(itemId);
 
         Assertions.assertTrue(isItemAvailable);
-    }
-
-    @Test
-    public void testConcurrentBorrowing() {
-
     }
 
     /** The tests below are checking bad-path
@@ -142,9 +140,10 @@ public class LibraryServiceTest {
     public void testBorrowItemWhenAlreadyBorrowed() {
         int userId = 1;
         int itemId = 5;
+        LocalDate mockNow = LocalDate.of(2023, 10, 19);
 
         User user = User.builder().userId(userId).name("Alice Smith").build();
-        Item item = new Item(1, itemId, DVD, "Pi", true, LocalDate.now(), LocalDate.now().plusWeeks(1));
+        Item item = new Item(1, itemId, DVD, "Pi", true, mockNow, mockNow.plusWeeks(1));
 
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(itemRepository.findAll()).thenReturn(List.of(item));
@@ -158,8 +157,9 @@ public class LibraryServiceTest {
     @Test
     public void testIsItemAvailableWithDuplicatesWhenUnavailable() {
         int itemId = 5;
-        Item item = new Item(1, itemId, DVD, "Pi", true, LocalDate.now(), LocalDate.now().plusWeeks(1));
-        Item item2 = new Item(2, itemId, DVD, "Pi", true, LocalDate.now(), LocalDate.now().plusWeeks(1));
+        LocalDate mockNow = LocalDate.of(2023, 10, 19);
+        Item item = new Item(1, itemId, DVD, "Pi", true, mockNow, mockNow.plusWeeks(1));
+        Item item2 = new Item(2, itemId, DVD, "Pi", true, mockNow, mockNow.plusWeeks(1));
 
         when(itemRepository.findAll()).thenReturn(List.of(item, item2));
 

@@ -1,12 +1,13 @@
 package app.controller;
 
+import app.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import app.service.LibraryService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -28,5 +29,29 @@ public class LibraryController {
         } else {
             return ResponseEntity.badRequest().body("Item borrow was unsuccessful. It may be unavailable or already borrowed.");
         }
+    }
+
+    @GetMapping("/getInventory")
+    public ResponseEntity<List<Item>> getInventory() {
+        List<Item> items = libraryService.getInventory();
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllOverdueItems")
+    public ResponseEntity<List<Item>> getAllOverdueItems() {
+        List<Item> items = libraryService.getAllOverdueItems();
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
+
+    @GetMapping("/getBorrowedItemsForUser/{userId}")
+    public ResponseEntity<List<Item>> getBorrowedItemsForUser(@PathVariable Integer userId) {
+        List<Item> items = libraryService.getBorrowedItemsForUser(userId);
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
+
+    @GetMapping("/isItemAvailable/{itemId}")
+    public ResponseEntity<Boolean> isItemAvailable(@PathVariable Integer itemId) {
+        Boolean isItemAvailable = libraryService.isItemAvailable(itemId);
+        return new ResponseEntity<>(isItemAvailable, HttpStatus.OK);
     }
 }

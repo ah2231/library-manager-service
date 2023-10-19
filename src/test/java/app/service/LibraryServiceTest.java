@@ -1,7 +1,6 @@
 package app.service;
 
 import app.model.Item;
-import app.model.ItemType;
 import app.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +56,23 @@ public class LibraryServiceTest {
 
         Assertions.assertTrue(isBorrowed);
         Assertions.assertTrue(user.getBorrowedItems().contains(item));
+    }
+
+    @Test
+    public void testReturnItem() {
+        int userId = 1;
+        int itemId = 5;
+
+        User user = User.builder().userId(userId).name("Alice Smith").build();
+        Item item = new Item(1, itemId, DVD, "Pi", false, null, null);
+
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        when(itemRepository.findAll()).thenReturn(List.of(item));
+        libraryService.borrowItem(userId, itemId);
+        boolean isReturned = libraryService.returnItem(userId, item.getUniqueId());
+
+        Assertions.assertTrue(isReturned);
+        Assertions.assertFalse(user.getBorrowedItems().contains(item));
     }
     @Test
     public void testGetInventory() {

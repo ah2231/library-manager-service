@@ -31,6 +31,17 @@ public class LibraryController {
         }
     }
 
+    @PostMapping("/return/{userId}/{uniqueId}")
+    public ResponseEntity<String> returnItem(@PathVariable Integer userId, @PathVariable Integer uniqueId) {
+        boolean result = libraryService.returnItem(userId, uniqueId);
+
+        if (result) {
+            return ResponseEntity.ok("Item return was successful.");
+        } else {
+            return ResponseEntity.badRequest().body("Item return was unsuccessful.");
+        }
+    }
+
     @GetMapping("/getInventory")
     public ResponseEntity<List<Item>> getInventory() {
         List<Item> items = libraryService.getInventory();

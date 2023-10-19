@@ -47,6 +47,17 @@ public class LibraryControllerTest {
     }
 
     @Test
+    public void testReturnItemEndpoint() throws Exception {
+        when(libraryService.returnItem(1,1)).thenReturn(true);
+
+        this.mockMvc.perform(post("/api/v1/return/1/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Item return was successful."));
+
+        verify(libraryService, times(1)).returnItem(1, 1);
+    }
+
+    @Test
     public void testBorrowItemEndpointUnsuccessful() throws Exception {
         when(libraryService.borrowItem(1,1)).thenReturn(false);
 

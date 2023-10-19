@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Item {
 
-    private final int uniqueId;
-    private final int itemId;
+    private final Integer uniqueId;
+    private final Integer itemId;
     private final ItemType itemType;
     private final String title;
     private boolean isBorrowed;

@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import app.service.LibraryService;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import static app.model.ItemType.DVD;

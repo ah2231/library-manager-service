@@ -31,6 +31,17 @@ public class LibraryController {
         }
     }
 
+    @PostMapping("/borrowUnique/{userId}/{uniqueId}")
+    public ResponseEntity<String> borrowItemUnique(@PathVariable Integer userId, @PathVariable Integer uniqueId) {
+        boolean result = libraryService.borrowItemUnique(userId, uniqueId);
+
+        if (result) {
+            return ResponseEntity.ok("Item borrow was successful.");
+        } else {
+            return ResponseEntity.badRequest().body("Item borrow was unsuccessful. It may be unavailable or already borrowed.");
+        }
+    }
+
     @PostMapping("/return/{userId}/{uniqueId}")
     public ResponseEntity<String> returnItem(@PathVariable Integer userId, @PathVariable Integer uniqueId) {
         boolean result = libraryService.returnItem(userId, uniqueId);

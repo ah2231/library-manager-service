@@ -12,8 +12,14 @@ import app.repository.ItemRepository;
 import app.repository.UserRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static app.model.ItemType.*;
 import static org.mockito.Mockito.*;
@@ -148,6 +154,47 @@ public class LibraryServiceTest {
         Assertions.assertTrue(isItemAvailable);
     }
 
+    /** This test makes sure that borrowing an item is thread-safe. We
+     * try and borrow an item using multiple threads. If the method is
+     * thread safe, then there should only be one successful borrow.
+     */
+    @Test
+    public void testBorrowItemThreadSafety() throws InterruptedException {
+        final int THREAD_COUNT = 100;
+        final AtomicInteger successfulBorrows = new AtomicInteger(0);
+        final Integer userId = 1;
+        final Integer itemId = 5;
+
+        User user = User.builder().userId(userId).name("Alice Smith").build();
+        Item item = new Item(1, itemId, DVD, "Pi", false, null, null);
+
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        when(itemRepository.findAll()).thenReturn(List.of(item));
+
+        ExecutorService service = Executors.newFixedThreadPool(THREAD_COUNT);
+        List<Future<?>> futures = new ArrayList<>();
+
+        for (int i = 0; i < THREAD_COUNT; i++) {
+            futures.add(service.submit(() -> {
+                if (libraryService.borrowItem(userId, itemId)) {
+                    successfulBorrows.incrementAndGet();
+                }
+            }));
+        }
+
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        service.shutdown();
+        Assertions.assertEquals(1, successfulBorrows.get());
+    }
+
+
     /** The tests below are checking bad-path
      * behaviour.
      */
@@ -193,4 +240,15 @@ public class LibraryServiceTest {
                 () -> libraryService.borrowItem(userId, itemId));
     }
 
+    @Test
+    public void testBorrowNonExistentItem() {
+        int userId = 1;
+        int itemId = 999;
+
+        User user = User.builder().userId(userId).name("Alice Smith").build();
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> libraryService.borrowItem(userId, itemId));
+    }
 }

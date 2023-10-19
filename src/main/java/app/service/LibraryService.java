@@ -31,7 +31,7 @@ public class LibraryService {
      * @return true if the item was successfully borrowed.
      */
     // @Transactional
-    public boolean borrowItem(Integer userId, Integer itemId) {
+    public synchronized boolean borrowItem(Integer userId, Integer itemId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with userId: " + userId + " was not found."));
 
@@ -54,6 +54,36 @@ public class LibraryService {
     }
 
     /**
+     * Lets a user borrow an item from the library using the uniqueId.
+     *
+     * @param userId The ID of the user wishing to borrow the item.
+     * @param uniqueId The item ID of the item to be borrowed.
+     * @return true if the item was successfully borrowed.
+     */
+    // @Transactional
+    public synchronized boolean borrowItemUnique(Integer userId, Integer uniqueId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with userId: " + userId + " was not found."));
+
+        Item item = itemRepository.findAll()
+                .stream()
+                .filter(i -> i.getUniqueId().equals(uniqueId) && !i.isBorrowed())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Item with itemId: " + uniqueId + " was not found or was not available."));
+
+        item.setBorrowed(true);
+        item.setBorrowDate(LocalDate.now());
+        item.setDueDate(LocalDate.now().plusWeeks(1));
+
+        user.getBorrowedItems().add(item);
+
+        userRepository.updateById(userId, user);
+        itemRepository.updateById(item.getUniqueId(), item);
+
+        return true;
+    }
+
+    /**
      * Lets a user return an item from the library.
      *
      * @param userId The ID of the user wishing to return the item.
@@ -61,7 +91,7 @@ public class LibraryService {
      * @return true if the item was successfully returned.
      */
 //    @Transactional -
-    public boolean returnItem(Integer userId, Integer uniqueId) {
+    public synchronized boolean returnItem(Integer userId, Integer uniqueId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with userId: " + userId + " was not found."));
 

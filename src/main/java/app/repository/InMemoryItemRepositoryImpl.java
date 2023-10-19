@@ -3,7 +3,8 @@ package app.repository;
 import app.model.Item;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,8 +24,8 @@ public class InMemoryItemRepositoryImpl implements ItemRepository {
     }
 
     @Override
-    public Collection<Item> findAll() {
-        return items.values();
+    public List<Item> findAll() {
+        return new ArrayList<>(items.values());
     }
 
     @Override

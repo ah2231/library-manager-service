@@ -167,4 +167,14 @@ public class LibraryServiceTest {
 
         Assertions.assertFalse(isItemAvailable);
     }
+
+    @Test
+    public void testBorrowNonExistentUser() {
+        int userId = 1;
+        int itemId = 999;
+
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> libraryService.borrowItem(userId, itemId));
+    }
+
 }

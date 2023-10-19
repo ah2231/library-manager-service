@@ -15,7 +15,7 @@ public class CsvUserLoaderImplTest {
     @Test
     public void testParseUsersFromFile() throws IOException {
         CsvUserLoaderImpl csvUserLoader = new CsvUserLoaderImpl();
-        List<User> users = csvUserLoader.loadUsers("src/main/resources/users.csv");
+        List<User> users = csvUserLoader.loadUsers("users.csv");
         Assertions.assertEquals(5, users.size());
     }
 

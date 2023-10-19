@@ -5,10 +5,11 @@ import app.model.ItemType;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -21,7 +22,9 @@ public class CsvItemLoaderImpl implements ItemDataLoader {
     public List<Item> loadItems(String path) {
         List<Item> items = new ArrayList<>();
 
-        try (Reader reader = Files.newBufferedReader(Paths.get(path));
+        Resource resource = new ClassPathResource(path);
+        try (InputStream inputStream = resource.getInputStream();
+             Reader reader = new BufferedReader(new InputStreamReader(inputStream));
              CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
 
             for (CSVRecord csvRecord : csvParser) {

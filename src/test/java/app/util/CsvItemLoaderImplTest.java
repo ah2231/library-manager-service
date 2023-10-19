@@ -12,7 +12,7 @@ public class CsvItemLoaderImplTest {
     @Test
     public void testParseItemsFromFile() throws IOException {
         CsvItemLoaderImpl csvItemLoader = new CsvItemLoaderImpl();
-        List<Item> items = csvItemLoader.loadItems("src/main/resources/inventory.csv");
+        List<Item> items = csvItemLoader.loadItems("inventory.csv");
         Assertions.assertEquals(12, items.size());
     }
 
